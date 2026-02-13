@@ -24,7 +24,9 @@ Written in _rust_. It runs as a binary inside the containerized nodes, responsib
 
 ### Design Overview
 
-![Architecture Diagram](docs/images/architecture.svg)
+<p align="center">
+  <img src="docs/images/architecture.svg" alt="Architecture Diagram" width="400"/>
+</p>
 
 ## Roadmap
 
