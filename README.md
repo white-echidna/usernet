@@ -11,7 +11,7 @@ The system follows a split architecture design, separating orchestration logic f
 Written in _golang_. It acts as the orchestrator, responsible for:
 
 - Parsing topology configurations.
-- Managing the lifecycle of network nodes using `libcontainer`.
+- - Managing the lifecycle of network nodes using native Linux namespaces.
 - Setting up the virtual network environment and isolation.
 
 ### Data Plane
