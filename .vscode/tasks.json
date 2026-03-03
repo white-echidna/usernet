@@ -2,24 +2,20 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "just: run",
+            "label": "task: run",
+            "command": "task run",
             "type": "shell",
-            "command": "just",
-            "args": [
-                "run"
+            "args": [],
+            "problemMatcher": [
+                "$go"
             ],
+            "presentation": {
+                "reveal": "always"
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
-            "problemMatcher": [
-                "$go",
-            ],
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared",
-                "clear": true
             }
-        },
+        }
     ]
 }
