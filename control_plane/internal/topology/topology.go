@@ -1,22 +1,23 @@
 package topology
 
 import (
-	"encoding/json"
 	"os"
+
+	"gopkg.in/yaml.v3"
 )
 
 type Topology struct {
-	Nodes []Node `json:"nodes"`
-	Links []Link `json:"links"`
+	Nodes []Node `yaml:"nodes"`
+	Links []Link `yaml:"links"`
 }
 
 type Node struct {
-	ID string `json:"id"`
+	ID string `yaml:"id"`
 }
 
 type Link struct {
-	From string `json:"from"`
-	To   string `json:"to"`
+	From string `yaml:"from"`
+	To   string `yaml:"to"`
 }
 
 func Parse(path string) (*Topology, error) {
@@ -27,7 +28,8 @@ func Parse(path string) (*Topology, error) {
 	defer f.Close()
 
 	var topology Topology
-	if err := json.NewDecoder(f).Decode(&topology); err != nil {
+
+	if err := yaml.NewDecoder(f).Decode(&topology); err != nil {
 		return nil, err
 	}
 

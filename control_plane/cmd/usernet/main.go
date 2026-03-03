@@ -1,56 +1,46 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
-	"os/exec"
-	"sync"
-	"syscall"
 
-	"github.com/white-echidna/usernet/internal/network"
+	"github.com/spf13/cobra"
+
+	"github.com/white-echidna/usernet/internal/app"
 	"github.com/white-echidna/usernet/internal/topology"
 )
 
+var (
+	rootCmd = &cobra.Command{
+		Use:   "usernet",
+		Short: "A user space network emulator",
+		Run:   run,
+	}
+	file string
+)
+
+func init() {
+	rootCmd.Flags().StringVarP(&file, "file", "f", "topology.json", "topology file")
+}
+
 func main() {
-	if len(os.Args) != 2 {
-		log.Fatalf("usage: %s <topology_file>", os.Args[0])
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
-	topo, err := topology.Parse(os.Args[1])
+}
+
+func run(cmd *cobra.Command, args []string) {
+	topology, err := topology.Parse(file)
 	if err != nil {
-		log.Fatalf("failed to parse topology: %v", err)
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
-	var wg sync.WaitGroup
-	pids := make(map[string]int)
-	cmds := make(map[string]*exec.Cmd)
+	app := app.New(topology)
 
-	for _, node := range topo.Nodes {
-		cmd := exec.Command("/bin/true")
-		cmd.SysProcAttr = &syscall.SysProcAttr{
-			Cloneflags: syscall.CLONE_NEWNET,
-		}
-		if err := cmd.Start(); err != nil {
-			log.Printf("failed to start data plane process for node %s: %v", node.ID, err)
-			continue
-		}
-		pids[node.ID] = cmd.Process.Pid
-		cmds[node.ID] = cmd
+	if err := app.Run(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
-
-	nm := network.NewRealNetworkManager()
-	if err := nm.CreateNetwork(topo, pids); err != nil {
-		log.Fatalf("failed to create network: %v", err)
-	}
-
-	for id, cmd := range cmds {
-		wg.Add(1)
-		go func(id string, cmd *exec.Cmd) {
-			defer wg.Done()
-			if err := cmd.Wait(); err != nil {
-				log.Printf("data plane process for node %s exited with error: %v", id, err)
-			}
-		}(id, cmd)
-	}
-
-	wg.Wait()
 }
