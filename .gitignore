@@ -1,9 +1,15 @@
-# Binary artifacts
-/bin/
+# Ignore everything
+*
+# But descend into directories
+!*/
 
-# Test binaries, built with `go test -c`
-*.test
+!.gitattributes
+!.gitignore
+!.editorconfig
 
-# Go workspace file
-go.work
-go.work.sum
+!LICENSE
+
+!*.md
+
+!*.yml
+!*.yaml

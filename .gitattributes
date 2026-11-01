@@ -1,0 +1,12 @@
+* text=auto eol=lf
+
+.gitattributes text
+.gitignore     text
+.editorconfig  text
+
+LICENSE text
+
+*.md text diff=markdown
+
+*.yml  text
+*.yaml text
