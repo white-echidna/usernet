@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/white-echidna/usernet/internal/command"
+	"github.com/white-echidna/usernet/control_plane/cli/command"
 )
 
 func main() {

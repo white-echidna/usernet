@@ -2,8 +2,6 @@ package command
 
 import (
 	"context"
-	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -33,13 +31,5 @@ func NewApplyCommand(cli Cli) *cobra.Command {
 }
 
 func runApply(ctx context.Context, cli Cli, opts applyOptions) error {
-	data, err := os.ReadFile(opts.filePath)
-	if err != nil {
-		return fmt.Errorf("cannot read config file %s: %w", opts.filePath, err)
-	}
-
-	// TODO: parse config; send config and ctx into usernetd
-	fmt.Fprintf(cli.Out(), "Config %q (%d bytes) is applied successfully", opts.filePath, len(data))
-
-	return nil
+	panic("not implemented")
 }
