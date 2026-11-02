@@ -4,38 +4,35 @@ import (
 	"context"
 
 	"github.com/spf13/cobra"
+	"github.com/white-echidna/usernet/control_plane/cli"
 )
 
 type runOptions struct {
-	configFile    string
-	scenarioFiles []string
+	filePath  string
+	scenarios []string
 }
 
-func NewRunCommand(cli Cli) *cobra.Command {
+func NewRunCommand(usernetCli cli.Cli) *cobra.Command {
 	var opts runOptions
 
 	cmd := &cobra.Command{
-		Use:   "run [-f CONFIG_FILE] SCENARIO_FILE [SCENARIO_FILE...]",
+		Use:   "run -f FILENAME SCENARIO [SCENARIO...]",
 		Short: "Run specified scenario",
 		Args:  cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			opts.scenarioFiles = args
-			return runScenarios(cmd.Context(), cli, opts)
+			opts.scenarios = args
+			return runScenarios(cmd.Context(), usernetCli, opts)
 		},
 	}
 
 	flags := cmd.Flags()
-	flags.StringVarP(&opts.configFile, "file", "f", "", "Optional path to YAML config")
+	flags.StringVarP(&opts.filePath, "file", "f", "", "Path to configuration file")
+	_ = cmd.MarkFlagRequired("file")
 	_ = cmd.MarkFlagFilename("file", "yaml", "yml")
 
 	return cmd
 }
 
-type scenarioFile struct {
-	path string
-	data []byte
-}
-
-func runScenarios(ctx context.Context, cli Cli, opts runOptions) error {
+func runScenarios(ctx context.Context, usernetCli cli.Cli, opts runOptions) error {
 	panic("not implemented")
 }

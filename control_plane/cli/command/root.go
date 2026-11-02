@@ -4,9 +4,10 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/white-echidna/usernet/control_plane/cli"
 )
 
-func NewRootCommand(cli Cli) *cobra.Command {
+func NewRootCommand(usernetCli cli.Cli) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:           "usernet COMMAND [ARG...]",
 		Short:         "A user space network emulator",
@@ -14,17 +15,17 @@ func NewRootCommand(cli Cli) *cobra.Command {
 		SilenceErrors: true,
 	}
 
-	cmd.SetIn(cli.In())
-	cmd.SetOut(cli.Out())
-	cmd.SetErr(cli.Err())
+	cmd.SetIn(usernetCli.In())
+	cmd.SetOut(usernetCli.Out())
+	cmd.SetErr(usernetCli.Err())
 
 	cmd.SetFlagErrorFunc(func(c *cobra.Command, err error) error {
 		return fmt.Errorf("%w\nTry '%s --help'", err, c.CommandPath())
 	})
 
 	cmd.AddCommand(
-		NewApplyCommand(cli),
-		NewRunCommand(cli),
+		NewApplyCommand(usernetCli),
+		NewRunCommand(usernetCli),
 	)
 
 	return cmd
