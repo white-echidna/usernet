@@ -1,0 +1,30 @@
+name: build
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [main, dev]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: task build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: control_plane/go.mod
+          cache-dependency-path: control_plane/go.sum
+
+      - name: Install Task
+        uses: go-task/setup-task@v2
+
+      - name: Run build
+        run: task build
