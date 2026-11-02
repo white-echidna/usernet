@@ -4,8 +4,19 @@ Command-line interface for managing the `usernet` control plane.
 
 ### Build
 
+We use [Task](https://taskfile.dev/) (`go-task`) to automate build commands.
+
+1. Install Task:
+
 ```bash
-go build -o usernet ./cmd/usernet
+# Via Go or with your packet manager
+go install github.com/go-task/task/v3/cmd/task@latest
+```
+
+2. Build the binary:
+
+```bash
+task build
 ```
 
 ### Usage

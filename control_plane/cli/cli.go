@@ -26,6 +26,6 @@ func NewUsernetCli() *usernetCli {
 	}
 }
 
+func (c *usernetCli) In() io.Reader  { return c.in }
 func (c *usernetCli) Out() io.Writer { return c.out }
 func (c *usernetCli) Err() io.Writer { return c.err }
-func (c *usernetCli) In() io.Reader  { return c.in }
