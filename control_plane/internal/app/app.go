@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/white-echidna/usernet/internal/topology"
+	"github.com/white-echidna/usernet/control_plane/internal/topology"
 )
 
 type App struct {

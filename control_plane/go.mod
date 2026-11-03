@@ -1,4 +1,4 @@
-module github.com/white-echidna/usernet
+module github.com/white-echidna/usernet/control_plane
 
 go 1.26.0
 

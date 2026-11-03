@@ -1,46 +1,25 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
 
-	"github.com/spf13/cobra"
-
-	"github.com/white-echidna/usernet/internal/app"
-	"github.com/white-echidna/usernet/internal/topology"
+	"github.com/white-echidna/usernet/control_plane/cli"
+	"github.com/white-echidna/usernet/control_plane/cli/command"
 )
-
-var (
-	rootCmd = &cobra.Command{
-		Use:   "usernet",
-		Short: "A user space network emulator",
-		Run:   run,
-	}
-	file string
-)
-
-func init() {
-	rootCmd.Flags().StringVarP(&file, "file", "f", "topology.json", "topology file")
-}
 
 func main() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-}
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer cancel()
 
-func run(cmd *cobra.Command, args []string) {
-	topology, err := topology.Parse(file)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	usernetCli := cli.NewUsernetCli()
+	rootCmd := command.NewRootCommand(usernetCli)
 
-	app := app.New(topology)
-
-	if err := app.Run(); err != nil {
-		fmt.Println(err)
+	if err := rootCmd.ExecuteContext(ctx); err != nil {
+		fmt.Fprintf(usernetCli.Err(), "Error: %v\n", err)
 		os.Exit(1)
 	}
 }
