@@ -4,11 +4,12 @@ import (
 	"context"
 
 	"github.com/spf13/cobra"
+
 	"github.com/white-echidna/usernet/control_plane/cli"
 )
 
 type applyOptions struct {
-	filePath string
+	configPath string
 }
 
 func NewApplyCommand(usernetCli cli.Cli) *cobra.Command {
@@ -24,7 +25,7 @@ func NewApplyCommand(usernetCli cli.Cli) *cobra.Command {
 	}
 
 	flags := cmd.Flags()
-	flags.StringVarP(&opts.filePath, "file", "f", "", "Path to configuration file")
+	flags.StringVarP(&opts.configPath, "file", "f", "", "Path to configuration file")
 	_ = cmd.MarkFlagRequired("file")
 	_ = cmd.MarkFlagFilename("file", "yaml", "yml")
 
